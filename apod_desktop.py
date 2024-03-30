@@ -14,6 +14,7 @@ Parameters:
 from datetime import date
 import os
 import image_lib
+import sys 
 
 # Full paths of the image cache folder and database
 # - The image cache directory is a subdirectory of the specified parent directory.
@@ -23,9 +24,9 @@ image_cache_dir = os.path.join(script_dir, 'images')
 image_cache_db = os.path.join(image_cache_dir, 'image_cache.db')
 
 def main():
-    ## DO NOT CHANGE THIS FUNCTION ##
-    # Get the APOD date from the command line
-    apod_date = get_apod_date()    
+
+    apod_date = get_apod_date()  # DO NOT CHANGE THIS FUNCTION #
+                                # Get the APOD date from the command line
 
     # Initialize the image cache
     init_apod_cache()
@@ -52,9 +53,29 @@ def get_apod_date():
         date: APOD date
     """
     # TODO: Complete function body
-    # Hint: The following line of code shows how to convert and ISO-formatted date string to a date object
-    apod_date = date.fromisoformat('2022-12-25')
-    return apod_date
+    num_params = len(sys.argv) -1
+    if num_params >= 1:
+        apod_date = date.fromisoformat(sys.argv[1])
+        try:
+            apod_date.isoformat(sys.argv[1])
+        except ValueError:
+            print(f'Error: Invalid APOD date ; {err}' )
+            
+            sys.exit('Script Execution aborted')
+
+        MIN_APOD_DATE =  date.fromisoformat('1995-06-16')
+        if apod_date < MIN_APOD_DATE:
+            print(f'Error: Date too far in the past; First APOD was on {MIN_APOD_DATE.isoformat()}' )
+            sys.exit('Script Execution aborted')
+        elif apod_date > date.today():
+            print(f'Error: Date too far in the future; Last APOD was on {date.today().isoformat()}' )
+            sys.exit('Script Execution aborted')
+    else: 
+        apod_date = date.today()
+        return apod_date
+            
+    
+    
 
 def init_apod_cache():
     """Initializes the image cache by:
