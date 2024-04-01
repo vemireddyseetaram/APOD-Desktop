@@ -24,7 +24,7 @@ def listbox_select(event):
 
 # Function to show the APOD image
 def show_image():
-    add_apod_to_cache(date_entry.get())
+    
     main()  # Placeholder function, replace with actual implementation if needed
 
 
@@ -41,9 +41,7 @@ frame.pack(padx=10, pady=10)
 label = Label(frame, text="View Cached Image")
 label.grid(row=0, column=0, padx=10, pady=10)
 
-# Entry for APOD Date
-date_entry = Entry(frame, width=10)
-date_entry.grid(row=0, column=1, padx=10, pady=10)
+
 
 # Show button
 show_button = Button(frame, text="Show", command=show_image)
@@ -74,8 +72,8 @@ listbox.bind("<<ListboxSelect>>", listbox_select)
 # Dropdown for selected date display
 selected_date = StringVar()
 selected_date.set("All Dates")
-date_dropdown = OptionMenu(frame, selected_date, "All Dates")
-date_dropdown.grid(row=0, column=1, padx=10, pady=10)
+date_label = Label(frame, textvariable=selected_date)
+date_label.grid(row=0, column=3, padx=10, pady=10)
 
 # Calendar widget
 calendar = Calendar(root, selectmode="day", year=2022, month=1, day=1)
@@ -84,13 +82,13 @@ calendar = Calendar(root, selectmode="day", year=2022, month=1, day=1)
 # Function to display the calendar
 def show_calendar():
     calendar.place(
-        x=date_dropdown.winfo_rootx(),
-        y=date_dropdown.winfo_rooty() + date_dropdown.winfo_height(),
+        x=root.winfo_screenwidth() // 2,
+        y=root.winfo_screenheight() // 2,
     )
 
 
 # Bind the calendar to the dropdown
-date_dropdown.bind("<1>", lambda event: show_calendar())
+date_label.bind("<1>", lambda event: show_calendar())
 
 
 # Function to update the selected date
