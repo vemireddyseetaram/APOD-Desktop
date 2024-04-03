@@ -30,7 +30,7 @@ def show_image():
 
 # Create the main window
 root = Tk()
-root.geometry("800x600")
+root.geometry("900x600")
 root.title("Astronomy Picture of the Day Viewer")
 
 # Frame for the input widgets
@@ -71,9 +71,9 @@ listbox.bind("<<ListboxSelect>>", listbox_select)
 
 # Dropdown for selected date display
 selected_date = StringVar()
-selected_date.set("All Dates")
+selected_date.set("Select date:")
 date_label = Label(frame, textvariable=selected_date)
-date_label.grid(row=0, column=3, padx=10, pady=10)
+date_label.grid(row=3, column=4, padx=310, pady=337)
 
 # Calendar widget
 calendar = Calendar(root, selectmode="day", year=2022, month=1, day=1)
