@@ -40,28 +40,6 @@ frame.pack(padx=10, pady=10)
 download_button = Button(frame, text="Download", command=show_image)
 download_button.grid(row=3, column=4, padx=0, pady=320)
 
-# Frame for the listbox and scrollbar
-image_frame = Frame(root)
-image_frame.pack(padx=10, pady=10, fill=BOTH, expand=True)
-scrollbar = Scrollbar(image_frame)
-listbox = Listbox(image_frame, yscrollcommand=scrollbar.set)
-
-# Populate the listbox with cached APOD dates
-for date in sorted(get_cached_apod_dates(), reverse=True):
-    listbox.insert(END, date)
-
-# Set up the scrollbar to control the listbox
-scrollbar.config(command=listbox.yview)
-scrollbar.pack(side=RIGHT, fill=Y)
-listbox.pack(side=LEFT, fill=BOTH, expand=True)
-
-# Place the image frame below the input
-frame.pack()
-image_frame.pack()
-frame.lift()
-
-# Bind the listbox selection to the listbox_select function
-listbox.bind("<<ListboxSelect>>", listbox_select)
 
 # Dropdown for selected date display
 selected_date = StringVar()
