@@ -15,6 +15,7 @@ from datetime import date
 import os
 import image_lib
 import sys 
+import sqlite3
 
 # Full paths of the image cache folder and database
 # - The image cache directory is a subdirectory of the specified parent directory.
@@ -82,8 +83,33 @@ def init_apod_cache():
     - Creating the image cache directory if it does not already exist,
     - Creating the image cache database if it does not already exist.
     """
+    if not image_cache_dir.exists():
+        image_cache_dir.mkdir(parents=True, exist_ok=True)
+        print(f"Created image cache directory at {image_cache_dir}")
+
     # TODO: Create the image cache directory if it does not already exist
+    if not os.path.exists(image_cache_dir):
+        os.makedirs(image_cache_dir)
+        print(f"Created image cache directory at {image_cache_dir}")
+    else:
+        print(f"Image cache directory already exists at {image_cache_dir}")    
+
     # TODO: Create the DB if it does not already exist
+
+def create_database():
+    """Create or open a database to track cached images."""
+    conn = sqlite3.connect(image_cache_db)
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS apod (
+            id INTEGER PRIMARY KEY,
+            date DATE UNIQUE,
+            title TEXT,
+            image_path TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()    
     return
 
 def add_apod_to_cache(apod_date):
