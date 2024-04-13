@@ -1,8 +1,17 @@
+import requests
+import ctypes
+
 '''
 Library of useful functions for working with images.
 '''
 def main():
     # TODO: Add code to test the functions in this module
+    image_data = download_image(
+        "https://apod.nasa.gov/apod/image/2201/M31_HstSubaruGendler_5000.jpg"
+    )
+    image_path = r"C:\temp\Nasa.jpg"
+    save_image_file(image_data, image_path)
+    set_desktop_background_image(image_path)
     return
 
 def download_image(image_url):
@@ -17,7 +26,16 @@ def download_image(image_url):
         bytes: Binary image data, if succcessful. None, if unsuccessful.
     """
     # TODO: Complete function body
-    return
+    print(f"Downloading image from {image_url}...", end="")
+    resp_msg = requests.get(image_url)
+
+    # Check if the image was retrieved successfully
+    if resp_msg.status_code == requests.codes.ok:
+        print("success")
+        return resp_msg.content
+    else:
+        print("failure")
+        print(f"Response code: {resp_msg.status_code} ({resp_msg.reason})")
 
 def save_image_file(image_data, image_path):
     """Saves image data as a file on disk.
@@ -32,7 +50,15 @@ def save_image_file(image_data, image_path):
         bool: True, if succcessful. False, if unsuccessful
     """
     # TODO: Complete function body
-    return
+    try:
+        print(f"Saving image file as {image_path}...", end="")
+        with open(image_path, "wb") as file:
+            file.write(image_data)
+        print("success")
+        return True
+    except:
+        print("failure")
+        return False
 
 def set_desktop_background_image(image_path):
     """Sets the desktop background image to a specific image.
@@ -44,7 +70,19 @@ def set_desktop_background_image(image_path):
         bytes: True, if succcessful. False, if unsuccessful        
     """
     # TODO: Complete function body
-    return
+    print(f"Setting desktop to {image_path}...", end="")
+    SPI_SETDESKWALLPAPER = 20
+    try:
+        if ctypes.windll.user32.SystemParametersInfoW(
+            SPI_SETDESKWALLPAPER, 0, image_path, 3
+        ):
+            print("success")
+            return True
+        else:
+            print("failure")
+    except:
+        print("failure")
+    return False
 
 def scale_image(image_size, max_size=(800, 600)):
     """Calculates the dimensions of an image scaled to a maximum width
