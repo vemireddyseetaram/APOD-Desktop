@@ -1,16 +1,16 @@
 from tkinter import *
 from tkinter import ttk  # Import Toplevel from tkinter directly
 from tkcalendar import Calendar
+import os
+from image_lib import download_image, save_image_file, set_desktop_background_image
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+images_dir = os.path.join(script_dir, "images")
 
 
 # Function to simulate getting cached APOD dates (replace with actual implementation if available)
 def get_cached_apod_dates():
-    return ["2023-01-01", "2023-01-02", "2023-01-03"]  # Example dates
-
-
-# Placeholder function for add_apod_to_cache and main functions
-def add_apod_to_cache(date):
-    pass
+    return ["2023-01-01", "2023-01-02", "2023-01-03"]  # Example date
 
 
 def main():
@@ -19,7 +19,7 @@ def main():
 
 # Function to handle the listbox selection
 def listbox_select(event):
-    pass  # Placeholder function, you can add functionality here
+    pass  # Placeholder function, you can add functionality hereSNCLASN
 
 
 # Function to show the APOD image
@@ -41,12 +41,6 @@ download_button = Button(frame, text="Download", command=show_image)
 download_button.grid(row=3, column=4, padx=0, pady=320)
 
 
-# Dropdown for selected date display
-selected_date = StringVar()
-selected_date.set("Select date:")
-date_label = Label(frame, textvariable=selected_date)
-date_label.grid(row=3, column=3, padx=450, pady=350)
-
 # Calendar widget
 calendar = Calendar(root, selectmode="day", year=2022, month=1, day=1)
 
@@ -62,11 +56,15 @@ def open_calendar():
         print(cal.get_date())
         top.destroy()
 
-    button = ttk.Button(top, text="Select", command=on_close)
+    button = ttk.Button(
+        top,
+        text="Select",
+        command=on_close,
+    )
     button.pack(pady=20)
 
+
 # Bind the calendar to the dropdown
-date_label.bind("<1>", lambda event: open_calendar())
 
 
 # Function to update the selected date
@@ -80,7 +78,8 @@ calendar.bind("<<CalendarSelected>>", lambda event: update_selected_date())
 
 # Create a frame for the "View Cached Image" section
 cached_image_frame = Frame(root, bd=2, relief="groove")
-cached_image_frame.place(x=10, y=400)  # Adjusted y-coordinate
+cached_image_frame.place(x=10, y=400)
+
 
 # Labels and dropdown for "View Cached Image"
 cached_image_label = Label(cached_image_frame, text="View Cached Image")
@@ -90,15 +89,32 @@ select_image_label = Label(cached_image_frame, text="Select Image:")
 select_image_label.grid(row=1, column=0, padx=10, pady=10)
 
 image_dropdown = ttk.Combobox(
-    cached_image_frame, values=["Image 1", "Image 2", "Image 3"]
+    cached_image_frame,
+    values=[
+        "Select an Image",
+    ]
 )
 image_dropdown.grid(row=1, column=1, padx=10, pady=10)
+
+# Create a frame for the "Get More Images" section
+get_image_frame = Frame(root, bd=2, relief="groove")
+get_image_frame.place(x=500, y=400)
+
+get_image_label = Label(get_image_frame, text="Get More Images")
+get_image_label.grid(row=1, column=0, padx=130, pady=50)
+
+# Dropdown for selected date display
+selected_date = StringVar()
+selected_date.set("Select date:")
+date_label = Label(frame, textvariable=selected_date)
+date_label.grid(row=0, column=0, padx=400, pady=400)
+
+
+date_label.bind("<1>", lambda event: open_calendar())
+
 
 # Button for "Set as Desktop"
 set_as_desktop_button = Button(cached_image_frame, text="Set as Desktop")
 set_as_desktop_button.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
 
 root.mainloop()
-
-
-
