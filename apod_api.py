@@ -23,17 +23,21 @@ def get_apod_info(apod_date):
     # TODO: Complete the function body
     # Hint: The APOD API uses query string parameters: https://requests.readthedocs.io/en/latest/user/quickstart/#passing-parameters-in-urls
     # Hint: Set the 'thumbs' parameter to True so the info returned for video APODs will include URL of the video thumbnail image
-    
+
     params = {
-        'date': apod_date,
-        'api_key': API_KEY,
-        'thumbs': True
+        "date": apod_date,
+        "api_key": API_KEY,
+        "thumbs": True,
+      
     }
+    
     response = requests.get(APOD_API_URL, params=params)
     if response.status_code == 200:
         return response.json()
     else:
         return None
+
+    
 
 def get_apod_image_url(apod_info_dict):
     """Gets the URL of the APOD image from the dictionary of APOD information.
@@ -58,4 +62,8 @@ def get_apod_image_url(apod_info_dict):
         return None
 
 if __name__ == '__main__':
-    main()
+   
+   main()
+
+
+        
