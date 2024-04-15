@@ -3,6 +3,9 @@ from tkinter import ttk  # Import Toplevel from tkinter directly
 from tkcalendar import Calendar
 import os
 from image_lib import download_image, save_image_file, set_desktop_background_image
+from apod_api import get_apod_info
+
+# Set the directory where the images are stored 
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 images_dir = os.path.join(script_dir, "images")
@@ -32,9 +35,19 @@ root = Tk()
 root.geometry("1200x800")
 root.title("Astronomy Picture of the Day Viewer")
 
-def set_Desktop_Image():
 
-    pass
+def set_Desktop_Image():
+    """Set the desktop background image to the official artwork for the currently selected Pokémon."""
+    selectedValue = combobox.get()
+    poke_info = get_apod_info(selectedValue)
+    image_data = download_image(poke_info["sprites"]["other"]["home"]["front_default"])
+    image_path = os.path.join(script_dir, f"{poke_info['id']}.jpg")
+
+    save_image_file(image_data, image_path)
+    # Set the desktop background image
+    set_desktop_background_image(image_path)
+
+
 # Set the icon for the GUI window
 root.iconbitmap(os.path.join(script_dir, "NASA_logo.ico"))
 # Frame for the input widgets
