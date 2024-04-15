@@ -29,9 +29,14 @@ def show_image():
 
 # Create the main window
 root = Tk()
-root.geometry("900x600")
+root.geometry("1200x800")
 root.title("Astronomy Picture of the Day Viewer")
 
+def set_Desktop_Image():
+
+    pass
+# Set the icon for the GUI window
+root.iconbitmap(os.path.join(script_dir, "NASA_logo.ico"))
 # Frame for the input widgets
 frame = Frame(root)
 frame.pack(padx=10, pady=10)
@@ -47,24 +52,7 @@ calendar = Calendar(root, selectmode="day", year=2022, month=1, day=1)
 
 # Function to display the calendar
 def open_calendar():
-    top = Toplevel(root)  # Use Toplevel directly from tkinter
-
-    cal = Calendar(top, selectmode="day")
-    cal.pack(pady=20)
-
-    def on_close():
-        print(cal.get_date())
-        top.destroy()
-
-    button = ttk.Button(
-        top,
-        text="Select",
-        command=on_close,
-    )
-    button.pack(pady=20)
-
-
-# Bind the calendar to the dropdown
+    calendar.place(x=400, y=400)
 
 
 # Function to update the selected date
@@ -92,7 +80,7 @@ image_dropdown = ttk.Combobox(
     cached_image_frame,
     values=[
         "Select an Image",
-    ]
+    ],
 )
 image_dropdown.grid(row=1, column=1, padx=10, pady=10)
 
@@ -100,8 +88,9 @@ image_dropdown.grid(row=1, column=1, padx=10, pady=10)
 get_image_frame = Frame(root, bd=2, relief="groove")
 get_image_frame.place(x=500, y=400)
 
-get_image_label = Label(get_image_frame, text="Get More Images")
-get_image_label.grid(row=1, column=0, padx=130, pady=50)
+#
+# get_image_label = Label(get_image_frame, text="Get More Images")
+# get_image_label.grid(row=1, column=0, padx=130, pady=50)
 
 # Dropdown for selected date display
 selected_date = StringVar()
@@ -110,11 +99,18 @@ date_label = Label(frame, textvariable=selected_date)
 date_label.grid(row=0, column=0, padx=400, pady=400)
 
 
-date_label.bind("<1>", lambda event: open_calendar())
+# Label to display selected date
+selected_date_label = Label(frame, text="Selected Date:")
+selected_date_label.grid(row=0, column=1, padx=10, pady=10)
+
+# Select Date Button
+select_date_button = Button(frame, text="Select Date", command=open_calendar)
+select_date_button.grid(row=0, column=2, padx=10, pady=10)
 
 
 # Button for "Set as Desktop"
 set_as_desktop_button = Button(cached_image_frame, text="Set as Desktop")
 set_as_desktop_button.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
+
 
 root.mainloop()
