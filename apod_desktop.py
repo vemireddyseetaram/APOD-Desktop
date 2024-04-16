@@ -144,7 +144,7 @@ def add_apod_to_cache(apod_data):
 
 def get_apod_info(apod_id):
     """Retrieves the APOD information from the database by ID."""
-    
+
     with sqlite3.connect(image_cache_db) as conn:
         apod = conn.execute('SELECT title, explanation, image_path FROM apod WHERE id = ?', (apod_id,)).fetchone()
         return {'title': apod[0], 'explanation': apod[1], 'file_path': apod[2]} if apod else None
@@ -191,6 +191,35 @@ def determine_apod_file_path(image_title, image_url):
     # TODO: Complete function body
     # Hint: Use regex and/or str class methods to determine the filename.
     return
+    
+def get_apod_info(image_id):
+    """Gets the title, explanation, and full path of the APOD having a specified
+    ID from the DB.
+
+    Args:
+        image_id (int): ID of APOD in the DB
+
+    Returns:
+        dict: Dictionary of APOD information
+    """
+    # TODO: Query DB for image info
+    # TODO: Put information into a dictionary
+    apod_info = {
+        #'title': , 
+        #'explanation': ,
+        'file_path': 'TBD',
+    }
+    return apod_info
+
+def get_all_apod_titles():
+    """Gets a list of the titles of all APODs in the image cache
+
+    Returns:
+        list: Titles of all images in the cache
+    """
+    # TODO: Complete function body
+    # NOTE: This function is only needed to support the APOD viewer GUI
+    return   
 
 def set_desktop_background_image(image_path):
     """Set the desktop background to the specified image. This function is simplified and may need OS-specific handling."""
