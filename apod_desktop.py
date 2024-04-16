@@ -85,7 +85,11 @@ def init_apod_cache():
 
 def fetch_apod_data(apod_date):
     """Fetches APOD data from NASA API."""
-    
+    API_KEY = "MBY8qG63gsJ0imaKEIoT1B8r0vs7oBkbLJagPGYs"
+    url = f"https://api.nasa.gov/planetary/apod?api_key={API_KEY}&date={apod_date.isoformat()}"
+    response = requests.get(url)
+    return response.json() if response.status_code == 200 else None
+
     # TODO: Download the APOD image
     # Hint: Use a function from image_lib.py 
     
