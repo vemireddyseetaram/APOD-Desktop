@@ -107,6 +107,24 @@ def add_apod_to_cache(apod_data):
         int: Record ID of the APOD in the image cache DB, if a new APOD is added to the
         cache successfully or if the APOD already exists in the cache. Zero, if unsuccessful.
     """
+    image_url = apod_data['url']
+    response = requests.get(image_url)
+    if response.status_code == 200:
+        image_path = image_cache_dir / f"{apod_data['date']}{Path(image_url).suffix}"
+        with open(image_path, 'wb') as file:
+            file.write(response.content)
+        image_hash = sha256(response.content).hexdigest()
+        with sqlite3.connect(image_cache_db) as conn:
+            conn.execute('''
+                INSERT OR IGNORE INTO apod (date, title, explanation, url, hdurl, media_type, image_path, image_hash)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+            ''', (apod_data['date'], apod_data['title'], apod_data['explanation'], 
+                  apod_data['url'], apod_data.get('hdurl'), apod_data['media_type'], str(image_path), image_hash))
+            conn.commit()
+            return conn.execute('SELECT last_insert_rowid()').fetchone()[0]
+    else:
+        print('Failed to download the APOD image:', response.text)
+        return None
     
     # TODO: Download the APOD information from the NASA API
     # Hint: Use a function from apod_api.py
