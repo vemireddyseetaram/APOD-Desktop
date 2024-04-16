@@ -63,6 +63,23 @@ def init_apod_cache():
     - Creating the image cache directory if it does not already exist,
     - Creating the image cache database if it does not already exist.
     """
+     image_cache_dir.mkdir(parents=True, exist_ok=True) # Create directory if it doesn't exist
+     if not image_cache_db.exists():
+        with sqlite3.connect(image_cache_db) as conn:
+            conn.execute('''
+                CREATE TABLE IF NOT EXISTS apod (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    date TEXT UNIQUE,
+                    title TEXT,
+                    explanation TEXT,
+                    url TEXT,
+                    hdurl TEXT,
+                    media_type TEXT,
+                    image_path TEXT,
+                    image_hash TEXT UNIQUE
+                );
+            ''')
+            conn.commit()
     # TODO: Create the image cache directory if it does not already exist
     # TODO: Create the DB if it does not already exist
 
