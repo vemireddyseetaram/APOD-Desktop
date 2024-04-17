@@ -151,6 +151,9 @@ def update_apod_info():
 # Bind the calendar selection to update APOD information
 calendar.bind("<<CalendarSelected>>", lambda event: update_apod_info())
 
+apod_info_frame = Frame(root, bd=2, relief="groove")
+apod_info_frame.pack(padx=10, pady=10)
+
 # Initially, display APOD information for the default selected date
 update_apod_info()
 # Populate the cached images dropdown menu
