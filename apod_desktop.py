@@ -20,7 +20,7 @@ from datetime import date
 from hashlib import sha256
 from pathlib import Path
 import ctypes
-from image_lib import set_desktop_background_image, download_image, save_image_file
+from image_lib import set_desktop_background_image
 
 
 # Define the path for the image cache folder and database using pathlib for better handling
@@ -214,15 +214,32 @@ def get_apod_info(image_id):
     }
     return apod_info
 
+import sqlite3
+
+
 def get_all_apod_titles():
     """Gets a list of the titles of all APODs in the image cache
 
     Returns:
         list: Titles of all images in the cache
     """
-    # TODO: Complete function body
-    # NOTE: This function is only needed to support the APOD viewer GUI
-    return   
+    # Connect to the SQLite database
+    conn = sqlite3.connect(
+        "path_to_image_cache.db"
+    )  # Replace 'path_to_image_cache.db' with the actual path
+    cursor = conn.cursor()
+
+    # Query the database to fetch all titles
+    cursor.execute("SELECT apod_title FROM apod_images")
+    titles = cursor.fetchall()
+
+    # Close the database connection
+    conn.close()
+
+    # Extract titles from the fetched data
+    title_list = [title[0] for title in titles]
+
+    return title_list
 
 
 def set_desktop_background_image(image_path):
@@ -250,9 +267,6 @@ def set_desktop_background_image(image_path):
         print("failure")
         print(f"Error: {e}")
         return False
-
-
-
 
 
 if __name__ == '__main__':

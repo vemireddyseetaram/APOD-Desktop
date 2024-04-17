@@ -4,7 +4,7 @@ from tkcalendar import Calendar
 import os
 from apod_api import get_apod_info
 from image_lib import set_desktop_background_image, download_image, save_image_file
-from apod_desktop import get_apod_info
+from apod_desktop import get_apod_info, image_cache_db
 
 
 # Set the directory where the images are stored
