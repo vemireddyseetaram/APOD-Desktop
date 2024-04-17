@@ -19,6 +19,9 @@ import sqlite3
 from datetime import date
 from hashlib import sha256
 from pathlib import Path
+import ctypes
+from image_lib import set_desktop_background_image, download_image, save_image_file
+
 
 # Define the path for the image cache folder and database using pathlib for better handling
 script_dir = Path(__file__).parent
@@ -80,8 +83,8 @@ def init_apod_cache():
                 );
             ''')
             conn.commit()
-    # TODO: Create the image cache directory if it does not already exist
-    # TODO: Create the DB if it does not already exist
+# TODO: Create the image cache directory if it does not already exist
+# TODO: Create the DB if it does not already exist
 
 def fetch_apod_data(apod_date):
     """Fetches APOD data from NASA API."""
@@ -92,7 +95,7 @@ def fetch_apod_data(apod_date):
 
     # TODO: Download the APOD image
     # Hint: Use a function from image_lib.py 
-    
+
 def add_apod_to_cache(apod_data):
     """Adds the APOD image from a specified date to the image cache.
      
@@ -191,7 +194,7 @@ def determine_apod_file_path(image_title, image_url):
     # TODO: Complete function body
     # Hint: Use regex and/or str class methods to determine the filename.
     return
-    
+
 def get_apod_info(image_id):
     """Gets the title, explanation, and full path of the APOD having a specified
     ID from the DB.
@@ -221,8 +224,36 @@ def get_all_apod_titles():
     # NOTE: This function is only needed to support the APOD viewer GUI
     return   
 
+
 def set_desktop_background_image(image_path):
-    """Set the desktop background to the specified image. This function is simplified and may need OS-specific handling."""
-    
+    """Sets the desktop background image to a specific image.
+
+    Args:
+        image_path (str): Path of image file
+
+    Returns:
+        bool: True, if successful. False, if unsuccessful.
+    """
+    print(f"Setting desktop background to {image_path}...", end="")
+    try:
+        # Use ctypes to set desktop background (Windows-specific)
+        SPI_SETDESKWALLPAPER = 20
+        if ctypes.windll.user32.SystemParametersInfoW(
+            SPI_SETDESKWALLPAPER, 0, image_path, 3
+        ):
+            print("success")
+            return True
+        else:
+            print("failure")
+            return False
+    except Exception as e:
+        print("failure")
+        print(f"Error: {e}")
+        return False
+
+
+
+
+
 if __name__ == '__main__':
     main()
