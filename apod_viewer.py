@@ -3,6 +3,9 @@ from tkinter import ttk
 from tkcalendar import Calendar
 import os
 from apod_api import get_apod_info
+from image_lib import set_desktop_background_image, download_image, save_image_file
+from apod_desktop import get_apod_info
+
 
 # Set the directory where the images are stored
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -11,15 +14,27 @@ images_dir = os.path.join(script_dir, "images")
 
 # Function to simulate getting cached APOD dates (replace with actual implementation if available)
 def get_cached_apod_dates():
-    return ["2023-01-01", "2023-01-02", "2023-01-03"]  # Example date
+    # Return a list of cached APOD dates 
+    # Example implementation:
+    cached_dates = ["2023-01-01", "2023-01-02", "2023-01-03"]  # Example date
+    return cached_dates
+    
 
-
+    
 def main():
-    pass
-
+    # Get cached APOD dates 
+    cached_dates = get_cached_apod_dates()
+    # Create a combobox with cached APOD dates
+    combobox_dates = ttk.Combobox(root, values=cached_dates)
+    combobox_dates.pack()
+    # Create a button to show the APOD image 
+    button = Button(root, text="Set Desktop Image", command=set_desktop_image)
+    button.pack()
+    
 
 # Function to show the APOD image
 def show_image():
+    
     main()  # Placeholder function, replace with actual implementation if needed
 
 
@@ -30,15 +45,18 @@ root.title("Astronomy Picture of the Day Viewer")
 
 
 # Function to set desktop image
-def set_Desktop_Image():
-    selectedValue = combobox.get()
-    poke_info = get_apod_info(selectedValue)
-    image_data = download_image(poke_info["sprites"]["other"]["home"]["front_default"])
-    image_path = os.path.join(script_dir, f"{poke_info['id']}.jpg")
+def set_desktop_image():
+    selectedValue = combobox_dates.get()
+    apod_info = get_apod_info(selectedValue)
+    image_data = download_image(apod_info["url"])
+    image_path = os.path.join(images_dir, f"{selectedValue}.jpg")
 
     save_image_file(image_data, image_path)
     # Set the desktop background image
     set_desktop_background_image(image_path)
+
+
+combobox_dates = ttk.Combobox(root)
 
 
 # Set the icon for the GUI window
@@ -63,6 +81,7 @@ def update_selected_date():
     calendar.place_forget()
 
 
+
 # Bind the calendar selection to update the selected date
 calendar.bind("<<CalendarSelected>>", lambda event: update_selected_date())
 
@@ -79,8 +98,11 @@ select_image_label.grid(row=1, column=0, padx=10, pady=10)
 
 image_dropdown = ttk.Combobox(
     cached_image_frame,
-    values=[
-        "Select an Image",
+    values=[ # Add the list of images to the dropdown
+        "image1"
+        ,
+        "image2"
+        ,
     ],
 )
 image_dropdown.grid(row=1, column=1, padx=10, pady=10)
@@ -89,15 +111,15 @@ image_dropdown.grid(row=1, column=1, padx=10, pady=10)
 selected_date = StringVar()
 selected_date.set("Select date:")
 date_label = Label(frame, textvariable=selected_date)
-date_label.grid(row=0, column=0, padx=400, pady=400)
+date_label.grid(row=0, column=2, padx=10, pady=10)
 
 # Label to display selected date
 selected_date_label = Label(frame, text="Selected Date:")
-selected_date_label.grid(row=0, column=1, padx=10, pady=10)
+selected_date_label.grid(row=0, column=0, padx=10, pady=10)
 
 # Select Date Button
 select_date_button = Button(frame, text="Select Date", command=open_calendar)
-select_date_button.grid(row=0, column=2, padx=10, pady=10)
+select_date_button.grid(row=0, column=0, padx=400, pady=400)
 
 # Create a frame to display APOD information
 apod_info_frame = Frame(root, bd=2, relief="groove")
@@ -131,5 +153,22 @@ calendar.bind("<<CalendarSelected>>", lambda event: update_apod_info())
 
 # Initially, display APOD information for the default selected date
 update_apod_info()
+# Populate the cached images dropdown menu
 
+# Function to populate the cached images dropdown menu
+def populate_cached_images_menu():
+    dates = get_cached_apod_dates()
+    image_dropdown["values"] = dates
+    + ["Select an Image"] 
+    # Set the default value to "Select an Image"
+    image_dropdown.current(len(dates))
+    # Function to display cached image on the frame
+def display_cached_image():
+        # Clear any previous information
+        for widget in apod_info_frame.winfo_children():
+            widget.destroy()
+            selected_date = image_dropdown.get()
+            if selected_date == "Select an Image":
+                return
+            
 root.mainloop()

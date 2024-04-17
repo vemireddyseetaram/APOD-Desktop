@@ -7,7 +7,7 @@ APOD_API_URL = 'https://api.nasa.gov/planetary/apod'
 API_KEY = "MBY8qG63gsJ0imaKEIoT1B8r0vs7oBkbLJagPGYs"
 def main():
     # TODO: Add code to test the functions in this module
-    apod_date = get_apod_info("")
+    apod_date = get_apod_info("2022-01-01")
     print(apod_date)
 
 def get_apod_info(apod_date):
