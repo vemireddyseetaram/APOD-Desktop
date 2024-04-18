@@ -8,6 +8,9 @@ __pycache__/
 *.png
 *.gif
 *.db
+*.cache
+images/*.db
+images/image_cache.db
 
 
 # C extensions
@@ -159,5 +162,8 @@ cython_debug/
 #.idea/
 *.db
 *.db
+*.db
+/images
+images/image_cache.db
 *.db
 /images
