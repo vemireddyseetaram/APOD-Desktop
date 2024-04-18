@@ -145,7 +145,12 @@ def add_apod_to_cache(apod_data):
     # TODO: Add the APOD information to the DB
     # Hint: Use the add_apod_to_db() function below
 
+def get_apod_info(apod_id):
+    """Retrieves the APOD information from the database by ID."""
 
+    with sqlite3.connect(image_cache_db) as conn:
+        apod = conn.execute('SELECT title, explanation, image_path FROM apod WHERE id = ?', (apod_id,)).fetchone()
+        return {'title': apod[0], 'explanation': apod[1], 'file_path': apod[2]} if apod else None
 
 def get_apod_id_from_db(image_sha256):
     """Gets the record ID of the APOD in the cache having a specified SHA-256 hash value
