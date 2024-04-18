@@ -174,12 +174,6 @@ def populate_cached_images_menu():
     # Set the default value to "Select an Image"
     image_dropdown.current(len(dates))
     # Function to display cached image on the frame
-def display_cached_image():
-        # Clear any previous information
-        for widget in apod_info_frame.winfo_children():
-            widget.destroy()
-            selected_date = image_dropdown.get()
-            if selected_date == "Select an Image":
-                return
+
             
 root.mainloop()
