@@ -92,6 +92,27 @@ def update_selected_date():
 # Bind the calendar selection to update the selected date
 calendar.bind("<<CalendarSelected>>", lambda event: update_selected_date())
 
+# Create a frame for the "View Cached Image" section
+cached_image_frame = Frame(root, bd=2, relief="groove")
+cached_image_frame.place(x=10, y=400)
+
+# Labels and dropdown for "View Cached Image"
+cached_image_label = Label(cached_image_frame, text="View Cached Image")
+cached_image_label.grid(row=0, column=0, padx=10, pady=10)
+
+select_image_label = Label(cached_image_frame, text="Select Image:")
+select_image_label.grid(row=1, column=0, padx=10, pady=10)
+
+image_dropdown = ttk.Combobox(
+    cached_image_frame,
+    values=[ # Add the list of images to the dropdown
+        "image1"
+        ,
+        "image2"
+        ,
+    ],
+)
+image_dropdown.grid(row=1, column=1, padx=10, pady=10)
 
 
 # Label to display selected date
