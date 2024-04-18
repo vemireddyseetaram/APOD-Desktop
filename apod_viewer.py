@@ -44,6 +44,13 @@ root.geometry("1200x800")
 root.title("Astronomy Picture of the Day Viewer")
 
 
+
+    # Load and display the NASA logo image
+nasa_logo_img = PhotoImage(file="NASA_logo.png")
+logo_label = Label(root, image=nasa_logo_img)
+logo_label.pack()
+
+
 # Function to set desktop image
 def set_desktop_image():
     selectedValue = combobox_dates.get()
